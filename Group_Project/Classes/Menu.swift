@@ -6,16 +6,16 @@
 //
 
 class Menu{
-    static func getMenu() -> [String: Any]?{
+    static func getMenu() -> [String: [String: [String: [String: Any]]]]?{
         return APIManager.fetchStaticAPIDataSync(from: "https://swiftbites.shaikhcloud.com/api/menu")
     }
-    static func getSnacks() -> [String: Any]?{
-        return APIManager.fetchStaticAPIDataSync(from: "https://swiftbites.shaikhcloud.com/api/snacks")
+    static func getSnacks() -> [String: [String: Any]]?{
+        return getMenu()?["data"]?["snacks"]
     }
-    static func getFood() -> [String: Any]?{
-        return APIManager.fetchStaticAPIDataSync(from: "https://swiftbites.shaikhcloud.com/api/food")
+    static func getFood() -> [String: [String: Any]]?{
+        return getMenu()?["data"]?["food"]
     }
-    static func getDrinks() -> [String: Any]?{
-        return APIManager.fetchStaticAPIDataSync(from: "https://swiftbites.shaikhcloud.com/api/drinks")
+    static func getDrinks() -> [String: [String: Any]]?{
+        return getMenu()?["data"]?["drinks"]
     }
 }
