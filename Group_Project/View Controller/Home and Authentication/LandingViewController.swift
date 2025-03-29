@@ -6,24 +6,70 @@
 //
 
 import UIKit
+import AVKit
+import AVFoundation
 
 class LandingViewController: UIViewController {
+    
+    @IBOutlet weak var videoView: UIView!
+
+    var player: AVPlayer?
+    var playerLayer: AVPlayerLayer?
+    
+    @IBAction func unwindToLogin(segue: UIStoryboardSegue) {
+       
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        setupVideo()
     }
-    
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        
+        playerLayer?.frame = videoView.bounds
     }
-    */
 
+    func setupVideo() {
+        guard let path = Bundle.main.path(forResource: "steak", ofType: "mp4") else {
+            print("Video file not found")
+            return
+        }
+        let videoURL = URL(fileURLWithPath: path)
+
+        
+        player = AVPlayer(url: videoURL)
+        player?.isMuted = true 
+
+        playerLayer = AVPlayerLayer(player: player)
+        playerLayer?.frame = videoView.bounds
+        playerLayer?.videoGravity = .resizeAspectFill
+
+        if let layer = playerLayer {
+            videoView.layer.addSublayer(layer)
+        }
+
+       
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(videoDidEnd),
+            name: .AVPlayerItemDidPlayToEndTime,
+            object: player?.currentItem
+        )
+
+        player?.play()
+    }
+
+    @objc func videoDidEnd(notification: Notification) {
+        player?.seek(to: .zero)
+        player?.play()
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
+    }
 }
+
