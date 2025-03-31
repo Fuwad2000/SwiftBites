@@ -12,7 +12,7 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var togglePasswordVisibilityButton: UIButton!
     @IBOutlet weak var toggleCPasswordVisibilityButton: UIButton!
 
-    
+    let mainDelegate = UIApplication.shared.delegate as! AppDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         emailTextField.delegate = self
@@ -82,6 +82,7 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
                     self?.displayError("Registration failed: \(error.localizedDescription)")
                     print(error.localizedDescription)
                 } else {
+                    self?.mainDelegate.userEmail = email
                     self?.navigateToHome()
                 
                     // TODO: Setup local SQLite database.

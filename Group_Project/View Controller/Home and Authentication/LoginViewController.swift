@@ -17,6 +17,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var togglePasswordVisibilityButton: UIButton!
 
+    let mainDelegate = UIApplication.shared.delegate as! AppDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +64,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
                 self?.displayError("Login failed: \(error.localizedDescription)")
             } else {
                 print("authentication passed")
+                self?.mainDelegate.userEmail = email
                 self?.navigateToHome()
             }
         }
