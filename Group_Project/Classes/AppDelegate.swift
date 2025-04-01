@@ -12,6 +12,7 @@ import FirebaseCore
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var userEmail: String? = ""
+    var cart: [String: Int] = [:]
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {

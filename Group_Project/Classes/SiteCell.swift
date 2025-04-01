@@ -9,36 +9,85 @@ import UIKit
 
 class SiteCell: UITableViewCell {
     
-    // step 11 - define 2 labels and an image view for our custom cell
     let primaryLabel = UILabel()
     let secondaryLabel = UILabel()
     let myImageView = UIImageView()
-    
-    // step 11b - override the following constructor
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    let shoppingCartButton: UIButton = {
+        let button = UIButton(type: .system)
+        if let cartImage = UIImage(systemName: "cart") {
+            button.setImage(cartImage, for: .normal)
+        }
+        button.tintColor = .systemPink
         
-        // step 11c - configure primaryLabel
+        // Make sure user interaction is enabled
+        button.isUserInteractionEnabled = true
+        
+        // Make the tappable area larger
+        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        
+        return button
+    }()
+    
+    let mainDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+    var cartButtonAction: (() -> Void)?
+    
+    // Override the constructor
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        // Configure primaryLabel
         primaryLabel.textAlignment = NSTextAlignment.left
         primaryLabel.font = UIFont.boldSystemFont(ofSize: 15)
         primaryLabel.backgroundColor = UIColor.clear
         primaryLabel.textColor = UIColor.black
         
-        // step 11d - configure secondaryLabel
-       secondaryLabel.textAlignment = NSTextAlignment.left
+        // Configure secondaryLabel
+        secondaryLabel.textAlignment = NSTextAlignment.left
         secondaryLabel.font = UIFont.boldSystemFont(ofSize: 16)
         secondaryLabel.backgroundColor = UIColor.clear
         secondaryLabel.textColor = UIColor.red
         
-        
-        // step 11e - no configuring of myImageView needed, instead add all 3 items manually as below
+        // Call super
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        // Add this to prevent cell selection from interfering with button taps
+        self.selectionStyle = .none
+        
+        // Add subviews to content view
         contentView.addSubview(primaryLabel)
         contentView.addSubview(secondaryLabel)
         contentView.addSubview(myImageView)
+        contentView.addSubview(shoppingCartButton)
         
-        
+        // Setup the button
+        setupCartButton()
     }
-    // Add this to your SiteCell class
+    
+    // Required initializer
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // Setup the cart button
+    private func setupCartButton() {
+        // Use traditional target-action pattern
+        shoppingCartButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        
+        // Debug output
+        print("Shopping cart button setup complete")
+    }
+    
+    // Button action handler
+    @objc private func buttonTapped() {
+        print("Button tapped directly in cell")
+        cartButtonAction?()
+    }
+    
+    // Method to set the button action from outside
+    func setCartButtonAction(_ action: @escaping () -> Void) {
+        self.cartButtonAction = action
+        print("Cart button action set")
+    }
+    
+    // Custom disclosure indicator
     func setCustomDisclosureIndicator(color: UIColor) {
         // Create a custom chevron image
         let chevronImage = UIImage(systemName: "chevron.right")?.withRenderingMode(.alwaysTemplate)
@@ -60,20 +109,14 @@ class SiteCell: UITableViewCell {
         }
     }
     
-    // step 11f - override base constructor to avoid compile error
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
     
-    // step 11g - define size and location of all 3 items as below
-    // return to ChooseSiteViewController.swift
+    // Layout subviews
     override func layoutSubviews() {
+        super.layoutSubviews()
         
         var f = CGRect(x: 125, y: 5, width: 460, height: 30)
         primaryLabel.frame = f
@@ -84,15 +127,25 @@ class SiteCell: UITableViewCell {
         f = CGRect(x: 25, y: 5, width: 45, height: 45)
         myImageView.frame = f
         
+        // Position the button - using larger size for easier tapping
+        let buttonSize: CGFloat = 44
         
+        // Use bounds instead of frame for positioning
+        let buttonX = contentView.bounds.width - buttonSize - 20
         
+        shoppingCartButton.frame = CGRect(
+            x: buttonX,
+            y: (contentView.bounds.height - buttonSize) / 2,
+            width: buttonSize,
+            height: buttonSize
+        )
+        
+        // Debug output
+        print("Button position: \(shoppingCartButton.frame), Cell content width: \(contentView.bounds.width)")
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
     }
-
 }
-
