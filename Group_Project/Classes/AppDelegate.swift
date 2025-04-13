@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var userEmail: String? = ""
     var cart: [String: Int] = [:]
+    var selectedOrder: [OrderItem] = []
     
     var databaseName: String? = "swiftBites.db"
     

@@ -65,6 +65,9 @@ class OrderBriefViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         orders.count
     }
+    @IBAction func unwindToOrders(segue: UIStoryboardSegue) {
+       
+    }
     
 //
 //    // MARK: - Table view data source.
@@ -94,20 +97,24 @@ class OrderBriefViewController: UIViewController, UITableViewDataSource, UITable
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let orderKey = Array(orders.keys)[indexPath.row]
-        var message = """
-        Order ID: \(orders[orderKey]?[0].orderId ?? "")
-        Items:
-        """
-        for orderItem: OrderItem in orders[orderKey] ?? []{
-            message.append(contentsOf: "\n\(orderItem.itemName ?? "") x \(orderItem.quantity ?? 0): \(orderItem.price ?? 0.0 * Double(orderItem.quantity ?? 0))")
-        }
-        message.append(contentsOf: "\nSubtotal: \(String(format: "%.2f", orders[orderKey]?[0].subtotal ?? 0.0))")
-        message.append(contentsOf: "\nTax: \(String(format: "%.2f", orders[orderKey]?[0].tax ?? 0.0))")
-        message.append(contentsOf: "\nTotal: \(String(format: "%.2f", orders[orderKey]?[0].total ?? 0.0))")
+        mainDelegate.selectedOrder = orders[orderKey] ?? []
         
-        let alert = UIAlertController(title: "Order Details", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
+        self.performSegue(withIdentifier: "details", sender: Any?.self)
+        
+//        var message = """
+//        Order ID: \(orders[orderKey]?[0].orderId ?? "")
+//        Items:
+//        """
+//        for orderItem: OrderItem in orders[orderKey] ?? []{
+//            message.append(contentsOf: "\n\(orderItem.itemName ?? "") x \(orderItem.quantity ?? 0): \(orderItem.price ?? 0.0 * Double(orderItem.quantity ?? 0))")
+//        }
+//        message.append(contentsOf: "\nSubtotal: \(String(format: "%.2f", orders[orderKey]?[0].subtotal ?? 0.0))")
+//        message.append(contentsOf: "\nTax: \(String(format: "%.2f", orders[orderKey]?[0].tax ?? 0.0))")
+//        message.append(contentsOf: "\nTotal: \(String(format: "%.2f", orders[orderKey]?[0].total ?? 0.0))")
+//        
+//        let alert = UIAlertController(title: "Order Details", message: message, preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//        present(alert, animated: true, completion: nil)
     }
 }
 

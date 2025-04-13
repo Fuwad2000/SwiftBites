@@ -28,6 +28,7 @@ class SiteCell: UITableViewCell {
         return button
     }()
     
+    
     let mainDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
     var cartButtonAction: (() -> Void)?
     
@@ -126,8 +127,10 @@ class SiteCell: UITableViewCell {
         
         f = CGRect(x: 25, y: 5, width: 45, height: 45)
         myImageView.frame = f
+        myImageView.layer.cornerRadius = myImageView.frame.size.width / 2
+        myImageView.clipsToBounds = true
         
-        // Position the button - using larger size for easier tapping
+        myImageView.contentMode = .scaleAspectFill
         let buttonSize: CGFloat = 44
         
         // Use bounds instead of frame for positioning
