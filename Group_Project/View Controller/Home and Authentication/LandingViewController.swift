@@ -16,7 +16,7 @@ class LandingViewController: UIViewController {
     var player: AVPlayer?
     var playerLayer: AVPlayerLayer?
     
-    @IBAction func unwindToLogin(segue: UIStoryboardSegue) {
+    @IBAction func unwindToLanding(segue: UIStoryboardSegue) {
        
     }
 

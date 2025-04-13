@@ -18,9 +18,10 @@ class OrderItem: NSObject {
     var tax: Double?
     var total: Double?
     var timestamp: String?
+    var orderId: String?
     
     // Initialize with data from the database
-    func initWithData(email: String, category: String, itemId: String, itemName: String, price: Double, quantity: Int, subtotal: Double, tax: Double, total: Double, timestamp: String) {
+    func initWithData(email: String, category: String, itemId: String, itemName: String, price: Double, quantity: Int, subtotal: Double, tax: Double, total: Double, timestamp: String, orderId: String) {
         self.email = email
         self.category = category
         self.itemId = itemId
@@ -31,5 +32,6 @@ class OrderItem: NSObject {
         self.tax = tax
         self.total = total
         self.timestamp = timestamp
+        self.orderId = orderId
     }
 }

@@ -7,11 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3710C2092DAB0F100057C998 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B5845C2DA0FF0100DD6669 /* libsqlite3.tbd */; };
+		3710C20B2DAB0F1E0057C998 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3710C20A2DAB0F110057C998 /* libsqlite3.0.tbd */; };
 		AA8834142D983AA7008750B1 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = AA8834132D983AA7008750B1 /* FirebaseAuth */; };
 		AA8834162D983AA7008750B1 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA8834152D983AA7008750B1 /* FirebaseCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3710C20A2DAB0F110057C998 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		43B5845C2DA0FF0100DD6669 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		AA4DE9342D8239E7006636B8 /* Group_Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Group_Project.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -42,7 +45,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3710C2092DAB0F100057C998 /* libsqlite3.tbd in Frameworks */,
 				AA8834162D983AA7008750B1 /* FirebaseCore in Frameworks */,
+				3710C20B2DAB0F1E0057C998 /* libsqlite3.0.tbd in Frameworks */,
 				AA8834142D983AA7008750B1 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -53,6 +58,7 @@
 		43B5845B2DA0FF0100DD6669 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3710C20A2DAB0F110057C998 /* libsqlite3.0.tbd */,
 				43B5845C2DA0FF0100DD6669 /* libsqlite3.tbd */,
 			);
 			name = Frameworks;

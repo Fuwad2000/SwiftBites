@@ -40,6 +40,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    func clearOrdersTable() -> Bool {
+        var db: OpaquePointer? = nil
+        var success = true
+        
+        // Open the database.
+        if sqlite3_open(databasePath, &db) == SQLITE_OK {
+            // Prepare the DELETE SQL statement.
+            let deleteStatementString = "DELETE FROM order_items"
+            var deleteStatement: OpaquePointer? = nil
+            
+            if sqlite3_prepare_v2(db, deleteStatementString, -1, &deleteStatement, nil) == SQLITE_OK {
+                // Execute the statement.
+                if sqlite3_step(deleteStatement) != SQLITE_DONE {
+                    if let errorPointer = sqlite3_errmsg(db) {
+                        let errorMessage = String(cString: errorPointer)
+                        print("Error deleting rows: \(errorMessage)")
+                    }
+                    success = false
+                }
+            } else {
+                print("DELETE statement could not be prepared")
+                success = false
+            }
+            
+            // Clean up and close the database.
+            sqlite3_finalize(deleteStatement)
+            sqlite3_close(db)
+        } else {
+            print("Unable to open database.")
+            success = false
+        }
+        readDataFromDatabase()
+        return success
+    }
     
     
     func insertIntoDatabase(order: OrderItem) -> Bool {
@@ -52,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             var insertStatement: OpaquePointer? = nil
             
             // Adjusted query to insert into the orders table with the relevant columns
-            let insertStatementString: String = "INSERT INTO order_items (email, category, item_id, item_name, price, quantity, subtotal, tax, total, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            let insertStatementString: String = "INSERT INTO order_items (email, category, item_id, item_name, price, quantity, subtotal, tax, total, timestamp, order_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             
             if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
                 // Binding the values from the order parameter
@@ -66,6 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let tax = order.tax!
                 let total = order.total!
                 let timestamp = order.timestamp! as NSString
+                let orderId = order.orderId! as NSString
                 
                 // Binding parameters for the INSERT statement
                 sqlite3_bind_text(insertStatement, 1, email.utf8String, -1, nil)
@@ -78,6 +113,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 sqlite3_bind_double(insertStatement, 8, tax)
                 sqlite3_bind_double(insertStatement, 9, total)
                 sqlite3_bind_text(insertStatement, 10, timestamp.utf8String, -1, nil)
+                sqlite3_bind_text(insertStatement, 11, orderId.utf8String, -1, nil)
+
                 
                 // Execute the statement
                 if sqlite3_step(insertStatement) == SQLITE_DONE {
@@ -134,6 +171,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let tax = sqlite3_column_double(queryStatement, 7)
                     let total = sqlite3_column_double(queryStatement, 8)
                     let timestamp = String(cString: sqlite3_column_text(queryStatement, 9))
+                    let orderId = String(cString: sqlite3_column_text(queryStatement, 10))
                     
                     // Initialize the OrderItem object with the retrieved data
                     let orderItem = OrderItem()
@@ -147,14 +185,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         subtotal: subtotal,
                         tax: tax,
                         total: total,
-                        timestamp: timestamp
+                        timestamp: timestamp,
+                        orderId: orderId
                     )
                     
                     // Add the orderItem to the orderItems array
                     orders.append(orderItem)
                     
                     // Print to verify
-                    print("QueryResult: \(email) - \(category) - \(itemId) - \(itemName) - \(price) - \(quantity) - \(subtotal) - \(tax) - \(total) - \(timestamp)")
+                    print("QueryResult: \(email) - \(category) - \(itemId) - \(itemName) - \(price) - \(quantity) - \(subtotal) - \(tax) - \(total) - \(timestamp) - \(orderId)")
                 }
                 
                 sqlite3_finalize(queryStatement)  // Finalize the query

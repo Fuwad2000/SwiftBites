@@ -1,5 +1,6 @@
 
 import UIKit
+import Foundation
 
 class PaymentViewController: UIViewController,  UITableViewDataSource, UITableViewDelegate {
     
@@ -106,7 +107,30 @@ class PaymentViewController: UIViewController,  UITableViewDataSource, UITableVi
         // Assuming you have all the data you need: subtotal, tax, total, and other properties.
         
         let timestamp = getCurrentTimestamp() // You can create a function to get the current timestamp.
-        
+        let orderId = UUID().uuidString
+        var subtotal = 0.0
+        var taxRate = 0.13 // 13% HST (or change based on your region)
+        var tax = 0.0
+        var total = 0.0
+        for (cartId, quantity) in mainDelegate.cart {
+            var category = ""
+            if cartId.contains("drink") {
+                category = "drinks"
+            } else if cartId.contains("food") {
+                category = "food"
+            } else {
+                category = "snacks"
+            }
+            
+            // Get the item details from the menu
+            let itemName = menu[category]?[cartId]?["name"] as? String ?? "Item"
+            let price = menu[category]?[cartId]?["price"] as? Double ?? 0.0
+            let itemId = cartId
+            
+            subtotal += price * Double(quantity)
+        }
+        total = subtotal * (taxRate + 1)
+        tax = subtotal * taxRate
         // Loop through the cart and create OrderItem objects for each item
         for (cartId, quantity) in mainDelegate.cart {
             var category = ""
@@ -123,13 +147,6 @@ class PaymentViewController: UIViewController,  UITableViewDataSource, UITableVi
             let price = menu[category]?[cartId]?["price"] as? Double ?? 0.0
             let itemId = cartId
             
-            // Calculate subtotal, tax, and total
-            let subtotal = price * Double(quantity)
-            let taxRate = 0.13 // 13% HST (or change based on your region)
-            let tax = subtotal * taxRate
-            let total = subtotal + tax
-            
-            
             
             // Initialize the OrderItem object
             let orderItem = OrderItem()
@@ -143,7 +160,8 @@ class PaymentViewController: UIViewController,  UITableViewDataSource, UITableVi
                 subtotal: subtotal,
                 tax: tax,
                 total: total,
-                timestamp: timestamp
+                timestamp: timestamp,
+                orderId: orderId
             )
             
             // Pass the OrderItem object to InsertIntoDatabase

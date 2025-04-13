@@ -437,7 +437,7 @@
                                                     <barButtonItem key="leftBarButtonItem" title="Back" id="c0d-Og-aUJ">
                                                         <color key="tintColor" systemColor="systemPinkColor"/>
                                                         <connections>
-                                                            <segue destination="Xgp-xM-5qI" kind="unwind" unwindAction="unwindToLoginWithSegue:" id="ajz-zA-4Op"/>
+                                                            <segue destination="Xgp-xM-5qI" kind="unwind" unwindAction="unwindToLandingWithSegue:" id="L5w-kU-PwE"/>
                                                         </connections>
                                                     </barButtonItem>
                                                 </navigationItem>
@@ -524,10 +524,10 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRV-sF-KbF">
-                                            <rect key="frame" x="140" y="739" width="114" height="35"/>
+                                            <rect key="frame" x="149" y="739" width="97" height="35"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" title="Button"/>
-                                            <buttonConfiguration key="configuration" style="filled" title="Place Order">
+                                            <buttonConfiguration key="configuration" style="filled" title="Checkout">
                                                 <backgroundConfiguration key="background">
                                                     <color key="backgroundColor" systemColor="systemPinkColor"/>
                                                 </backgroundConfiguration>
@@ -768,13 +768,31 @@
                                                 <color key="textColor" systemColor="systemPinkColor"/>
                                             </textAttributes>
                                             <items>
-                                                <navigationItem title="Order Table" id="8bv-Au-H0H">
-                                                    <barButtonItem key="leftBarButtonItem" title="back" id="m91-TG-9xo">
+                                                <navigationItem title="Order History" id="8bv-Au-H0H">
+                                                    <barButtonItem key="leftBarButtonItem" title="Back" id="m91-TG-9xo">
                                                         <color key="tintColor" systemColor="systemPinkColor"/>
+                                                        <connections>
+                                                            <segue destination="hSO-FU-gYF" kind="unwind" unwindAction="unwindToLandingWithSegue:" id="YY4-kp-E6P"/>
+                                                        </connections>
+                                                    </barButtonItem>
+                                                    <barButtonItem key="rightBarButtonItem" title="Clear Orders" id="vTm-6e-9WA">
+                                                        <color key="tintColor" systemColor="systemPinkColor"/>
+                                                        <connections>
+                                                            <action selector="clearTable:" destination="LyB-zZ-iTH" id="6Lt-6i-Vyn"/>
+                                                        </connections>
                                                     </barButtonItem>
                                                 </navigationItem>
                                             </items>
                                         </navigationBar>
+                                        <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="tKr-dj-gNy">
+                                            <rect key="frame" x="0.0" y="117" width="393" height="660"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <connections>
+                                                <outlet property="dataSource" destination="LyB-zZ-iTH" id="JNA-gf-Vdz"/>
+                                                <outlet property="delegate" destination="LyB-zZ-iTH" id="hK7-Ox-azH"/>
+                                            </connections>
+                                        </tableView>
                                     </subviews>
                                 </view>
                                 <blurEffect style="extraLight"/>
@@ -783,10 +801,14 @@
                         <viewLayoutGuide key="safeArea" id="eSL-s6-ban"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="tKr-dj-gNy" id="cws-fS-Xtl"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9xP-2x-1Zj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="hSO-FU-gYF" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2706" y="1204"/>
+            <point key="canvasLocation" x="2704.5801526717555" y="1203.5211267605634"/>
         </scene>
         <!--Order Details View Controller-->
         <scene sceneID="TlZ-uc-WRR">
@@ -829,6 +851,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="CXK-Pj-bLW"/>
         <segue reference="D7h-Jw-WCR"/>
         <segue reference="Qbm-Pd-vIl"/>
     </inferredMetricsTieBreakers>
