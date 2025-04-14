@@ -4,21 +4,34 @@
 //
 //  Created by Fuwad Oladega on 2025-03-27.
 //
+//  This class handles user authentication and login functionality.
+//  Principal author: Fuwad Oladega
 
 import UIKit
 import FirebaseAuth
 
-class LoginViewController: UIViewController,UITextFieldDelegate {
+class LoginViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: - Outlets
+    /// Text field for user's email input
     @IBOutlet weak var emailTextField: UITextField!
+    
+    /// Text field for user's password input
     @IBOutlet weak var passwordTextField: UITextField!
+    
+    /// Button to submit login credentials
     @IBOutlet weak var loginButton: UIButton!
+    
+    /// Label to display error messages
     @IBOutlet weak var errorLabel: UILabel!
+    
+    /// Button to toggle password visibility
     @IBOutlet weak var togglePasswordVisibilityButton: UIButton!
 
+    /// Reference to the app delegate for accessing shared data
     let mainDelegate = UIApplication.shared.delegate as! AppDelegate
 
+    /// Set up the view when loaded
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,6 +42,8 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
         passwordTextField.isSecureTextEntry = true
     }
     
+    /// Toggle password field between visible and hidden text
+    /// - Parameter sender: The button that triggered this action
     @IBAction func togglePasswordVisibility(_ sender: UIButton) {
         // Toggle the secure text entry
         passwordTextField.isSecureTextEntry.toggle()
@@ -38,19 +53,24 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
         togglePasswordVisibilityButton.setImage(buttonImage, for: .normal)
     }
 
-    
+    /// Unwind segue handler when returning to the login screen
+    /// - Parameter segue: The segue being unwound
     @IBAction func unwindToLogin(segue: UIStoryboardSegue) {
        
     }
     
+    /// Dismiss keyboard when return is pressed
+    /// - Parameter textField: The active text field
+    /// - Returns: Whether the text field should resign first responder status
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-       
+        // Resign first responder to dismiss keyboard
         return textField.resignFirstResponder()
     }
     
     // MARK: - Actions
     
-    // Login button pressed
+    /// Authenticate user when login button is pressed
+    /// - Parameter sender: The button that triggered this action
     @IBAction func loginButtonPressed(_ sender: UIButton) {
         guard let email = emailTextField.text, !email.isEmpty,
               let password = passwordTextField.text, !password.isEmpty else {
@@ -72,20 +92,21 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
 
     // MARK: - Helper Methods
     
-    // Display an error message
+    /// Display an error message to the user
+    /// - Parameter message: The error message to display
     func displayError(_ message: String) {
         errorLabel.text = message
         errorLabel.isHidden = false
     }
     
-    // Navigate to the home screen (e.g., main app screen)
+    /// Navigate to the landing screen after successful login
     func navigateToHome() {
         if let landingVC = storyboard?.instantiateViewController(identifier: "LandingViewController") {
               landingVC.modalPresentationStyle = .fullScreen // Makes it full screen, avoiding stacked views
               present(landingVC, animated: true) {
-                  self.view.window?.rootViewController = landingVC // Removes login from the stack
+                  // Remove login from the stack to prevent back navigation
+                  self.view.window?.rootViewController = landingVC
               }
           }
-
     }
 }

@@ -2,17 +2,19 @@
 //  ConfirmationViewController.swift
 //  Group_Project
 //
-//  Created by Fuwad Oladega on 2025-03-27.
+//  Created by Muhammad Bilal Arshad on 2025-03-27.
 //
+//  This class manages the order confirmation screen displayed after successful checkout.
+//  Principal author: Muhammad Bilal Arshad
 
 import UIKit
 
 class ConfirmationViewController: UIViewController {
 
+    /// Set up the view when loaded
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        // Initial view setup
     }
     
 

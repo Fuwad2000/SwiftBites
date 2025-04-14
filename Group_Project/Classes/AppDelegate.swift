@@ -4,6 +4,9 @@
 //
 //  Created by Fuwad Oladega on 2025-03-12.
 //
+//  This class serves as the application delegate handling database operations,
+//  application configuration, and maintaining application state.
+//  No Principal Author, as all ViewControllers utilized AppDelegate for helper functions
 
 import UIKit
 import FirebaseCore
@@ -12,21 +15,30 @@ import SQLite3
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
+    /// Current user's email address
     var userEmail: String? = ""
+    
+    /// Shopping cart storing item IDs and quantities
     var cart: [String: Int] = [:]
+    
+    /// Currently selected order items
     var selectedOrder: [OrderItem] = []
     
+    /// Name of the SQLite database
     var databaseName: String? = "swiftBites.db"
     
+    /// Full path to the SQLite database
     var databasePath: String? = ""
     
+    /// Collection of order items fetched from the database
     var orders : [OrderItem] = []
 
+    /// Initializes the application, configures Firebase, and sets up the database
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         FirebaseApp.configure()
         
-        
+        // Find the documents directory to store the database
         let documentPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,  .userDomainMask, true)
         
         let documentDir = documentPath[0]
@@ -36,11 +48,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         checkAndCreateDatabase()
         readDataFromDatabase()
         
-        
-        
-        
         return true
     }
+    
+    /// Clears all order items from the database
+    /// - Returns: Boolean indicating success or failure
+    /// Author: Hammad Shaikh
     func clearOrdersTable() -> Bool {
         var db: OpaquePointer? = nil
         var success = true
@@ -77,6 +90,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
+    /// Inserts a new order item into the database
+    /// - Parameter order: The OrderItem to insert
+    /// - Returns: Boolean indicating success or failure
+    /// - Author: Muhammad Bilal Arshad
     func insertIntoDatabase(order: OrderItem) -> Bool {
         var db: OpaquePointer? = nil
         var returnCode: Bool = true
@@ -141,10 +158,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-    
-    
-    
-    
+    /// Reads all order items from the database and populates the orders array
+    /// Author: Muhammad Bilal Arshad
     func readDataFromDatabase(){
         orders.removeAll()  // Clear previous data
         
@@ -157,7 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             var queryStatement : OpaquePointer? = nil
             
             // Adjusted query for the order_items table (selecting everything from order_items)
-            let queryStatementString : String = "SELECT * FROM order_items"
+            let queryStatementString : String = "SELECT * FROM order_items ORDER BY timestamp DESC "
             
             if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK{
                 while(sqlite3_step(queryStatement) == SQLITE_ROW){
@@ -209,13 +224,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-    
-    
-    
-    
-    
-    
-    
+    /// Checks if the database exists, and if not, creates it from the app bundle
+    /// Author: Muhammad Bilal Arshad
     func checkAndCreateDatabase() {
         
         var success = false
@@ -224,12 +234,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         success = fileManager.fileExists(atPath: databasePath!)
         
+        // If database already exists, no need to create it
         if(success){
             return
         }
         
+        // Copy the database from the app bundle to the documents directory
         let databasePathFromApp = Bundle.main.resourcePath?.appending("/" + databaseName!)
-        
         
         try? fileManager.copyItem(atPath: databasePathFromApp!, toPath: databasePath!)
         
@@ -239,11 +250,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 
     // MARK: UISceneSession Lifecycle
+    
+    /// Creates and configures a UISceneConfiguration for a connecting scene session
+    /// - Parameters:
+    ///   - application: The singleton app object
+    ///   - connectingSceneSession: The scene session that's being created
+    ///   - options: Options for configuring the scene
+    /// - Returns: A UISceneConfiguration object
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
 
+    /// Called when the user discards a scene session
+    /// - Parameters:
+    ///   - application: The singleton app object
+    ///   - sceneSessions: The discarded scene sessions
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+        // Release resources associated with discarded sessions when they're no longer needed
     }
 }
 
