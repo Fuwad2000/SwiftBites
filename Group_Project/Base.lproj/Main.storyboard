@@ -546,7 +546,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="4FU-Jg-hMt"/>
                     <connections>
-                        <outlet property="tableView" destination="Hxi-Eb-ZL1" id="A9J-A8-wwT"/>
+                        <outlet property="tableView" destination="Hxi-Eb-ZL1" id="4nN-Nz-vII"/>
                         <outlet property="totalLbl" destination="Bbb-ln-zoN" id="asB-yR-kae"/>
                     </connections>
                 </viewController>

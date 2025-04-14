@@ -3,6 +3,7 @@
 import UIKit
 
 class CartViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    @IBOutlet var tableView: UITableView!
     @IBOutlet var totalLbl: UILabel!
     let mainDelegate = UIApplication.shared.delegate as! AppDelegate
     var menu: [String: [String: [String: Any]]] = Menu.getMenu()?["data"] ?? [:]
